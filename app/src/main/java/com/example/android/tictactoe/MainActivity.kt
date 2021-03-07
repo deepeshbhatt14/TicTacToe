@@ -32,8 +32,8 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         }
         initialiseBoardStatus()
         ButtonReset.setOnClickListener{
-            TurnCount=0
             Player=true
+            TurnCount=0
             displayTv.text="Player X Turn"
             for(i in 0..2){
                 for (j in 0..2){
@@ -91,42 +91,60 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
         else{
             updateDisplay("Player O Turn")
         }
-        if(TurnCount==9){
+        var flag :Boolean = checkWinner()
+        if(TurnCount==9&&!(flag)){
+            Draw++;
             updateDisplay("Game Draw")
         }
-        checkWinner()
     }
-    private fun checkWinner(){
+    private fun checkWinner ():Boolean{
         for(i in 0..2){
             if(BoardStatus[i][0]!=-1&&BoardStatus[i][0]==BoardStatus[i][1]&&BoardStatus[i][1]==BoardStatus[i][2]){
-                if(Player)
+                if(Player) {
                     updateDisplay("Player O Won")
-                else
+                    return true
+                }
+                else {
                     updateDisplay("Player X Won")
+                    return true
+                }
                 break
             }
         }
         for(j in 0..2){
             if(BoardStatus[0][j]!=-1&&BoardStatus[0][j]==BoardStatus[1][j]&&BoardStatus[1][j]==BoardStatus[2][j]){
-                if(Player)
+                if(Player) {
                     updateDisplay("Player O Won")
-                else
+                    return true
+                }
+                else {
                     updateDisplay("Player X Won")
+                    return true
+                }
                 break
             }
         }
         if(BoardStatus[0][0]!=-1&&BoardStatus[0][0]==BoardStatus[1][1]&&BoardStatus[1][1]==BoardStatus[2][2]){
-            if(Player)
+            if(Player) {
                 updateDisplay("Player O Won")
-            else
+                return true
+            }
+            else {
                 updateDisplay("Player X Won")
+                return true
+            }
         }
         if(BoardStatus[2][0]!=-1&&BoardStatus[2][0]==BoardStatus[1][1]&&BoardStatus[1][1]==BoardStatus[0][2]){
-            if(Player)
+            if(Player) {
                 updateDisplay("Player O Won")
-            else
+                return true
+            }
+            else {
                 updateDisplay("Player X Won")
+                return true
+            }
         }
+        return false
     }
     private fun updateDisplay(text:String){
         displayTv.text=text
@@ -137,13 +155,10 @@ class MainActivity : AppCompatActivity(), View.OnClickListener {
                 }
             }
         }
-        if(text.contains("Draw")){
-            Draw++;
-        }
         if(text.contains("X Won")){
             Xwins++;
         }
-        if(text.contains("O Won")){
+        else if(text.contains("O Won")){
             Owins++;
         }
         TextDraw.text="Draws:"+Draw
